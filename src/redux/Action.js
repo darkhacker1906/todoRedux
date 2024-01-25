@@ -4,6 +4,7 @@ export const addTodo = (data) => {
     payload: {
       data: data,
       id: new Date().getTime().toString(),
+      check:false
     },
   };
 };
@@ -15,7 +16,7 @@ export const deleteTodo = (todoId) => {
     },
   };
 };
-export const editTodo = () => {
+export const editTodo = (todoId,data) => {
   return {
     type: "EDIT_TODO",
     payload: {
@@ -24,3 +25,11 @@ export const editTodo = () => {
     },
   };
 };
+export const handleCheck = (todoId) => {
+    return {
+      type: "HANDLE_CHECK",
+      payload: {
+        todoId: todoId,
+      },
+    };
+  };
