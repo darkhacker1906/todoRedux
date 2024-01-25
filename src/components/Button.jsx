@@ -1,11 +1,13 @@
-import React from 'react'
+import React from "react";
 
-function Button({title}) {
+function Button({ title,handleClick }) {
   return (
     <div>
-      <button className='bg-slate-300 hover:bg-slate-400' type='submit'>{title}</button>
+      <button className="bg-slate-300 hover:bg-slate-400" type="submit" onClick={handleClick}>
+        {title}
+      </button>
     </div>
-  )
+  );
 }
 
-export default Button
+export default Button;
