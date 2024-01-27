@@ -4,7 +4,7 @@ export const addTodo = (data) => {
     payload: {
       data: data,
       id: new Date().getTime().toString(),
-      check:false
+      checked: false,
     },
   };
 };
@@ -16,7 +16,7 @@ export const deleteTodo = (todoId) => {
     },
   };
 };
-export const editTodo = (todoId,data) => {
+export const editTodo = (todoId, data) => {
   return {
     type: "EDIT_TODO",
     payload: {
@@ -26,10 +26,18 @@ export const editTodo = (todoId,data) => {
   };
 };
 export const handleCheck = (todoId) => {
-    return {
-      type: "HANDLE_CHECK",
-      payload: {
-        todoId: todoId,
-      },
-    };
+  return {
+    type: "HANDLE_CHECK",
+    payload: {
+      todoId: todoId,
+    },
   };
+};
+export const setfilterType = (filterType) => {
+  return {
+    type: "SET_FILTER_TYPE",
+    payload: {
+      filterType: filterType,
+    },
+  };
+};

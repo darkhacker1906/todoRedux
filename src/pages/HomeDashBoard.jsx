@@ -1,41 +1,48 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
-import { useDispatch} from "react-redux";
-import { addTodo, editTodo } from "../redux/Action";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo, editTodo, setfilterType } from "../redux/Action";
 import TodoTable from "../components/TodoTable";
 
 function HomeDashBoard() {
   const dispatch = useDispatch();
+  var todoList = useSelector((state) => state.list);
   const [todoInput, setTodoInput] = useState("");
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedTodoId,setSelectedTodoId]=useState(null);
-  
+  const [selectedTodoId, setSelectedTodoId] = useState(null);
+  const [error, setError] = useState("");
 
   const handleTodoInput = (e) => {
     setTodoInput(e.target.value);
+    setError("");
   };
 
   const handleSubmit = () => {
-    if (!todoInput.trim() == "") {
+    if (todoInput.trim() == "") {
+      setError("Please enter todo");
+      setTodoInput("");
+    } else {
       dispatch(addTodo(todoInput));
       setTodoInput("");
     }
-    setTodoInput("");
   };
-  const handleUpdate=(selectedTodoId,todoInput)=>{
-    if(todoInput.trim()!=="" && selectedTodoId !==null){
+  const handleUpdate = (selectedTodoId, todoInput) => {
+    if (todoInput.trim() !== "" && selectedTodoId !== null) {
       dispatch(editTodo(selectedTodoId, todoInput));
     }
-     setSelectedTodoId(null);
-     setIsEdit(false);
-     setTodoInput("");
-  }
-  const handleCancel=()=>{
     setSelectedTodoId(null);
     setIsEdit(false);
     setTodoInput("");
-  }
+  };
+  const handleCancel = () => {
+    setSelectedTodoId(null);
+    setIsEdit(false);
+    setTodoInput("");
+  };
+  const handleFilter = (filterType) => {
+    dispatch(setfilterType(filterType));
+  };
   return (
     <div>
       <form onSubmit={(e) => e.preventDefault()}>
@@ -44,6 +51,7 @@ function HomeDashBoard() {
           InputFieldType="text"
           todoInput={todoInput}
           handleTodoInput={handleTodoInput}
+          error={error}
         />
 
         {!isEdit ? (
@@ -51,13 +59,33 @@ function HomeDashBoard() {
         ) : (
           <>
             <div className="flex gap-2">
-              <Button title="UPDATE" handleClick={()=>handleUpdate(selectedTodoId,todoInput)} />
+              <Button
+                title="UPDATE"
+                handleClick={() => handleUpdate(selectedTodoId, todoInput)}
+              />
               <Button title="CANCEL" handleClick={handleCancel} />
             </div>
           </>
         )}
       </form>
-      <TodoTable setTodoInput={setTodoInput} setIsEdit={setIsEdit} setSelectedTodoId={setSelectedTodoId}/>
+      {todoList.length > 0 && (
+        <div className="flex gap-2 mt-4 mb-1">
+          <Button title="All" handleClick={() => handleFilter("all")}></Button>
+          <Button
+            title="Completed"
+            handleClick={() => handleFilter("completed")}
+          ></Button>
+          <Button
+            title="Incomplete"
+            handleClick={() => handleFilter("incomplete")}
+          ></Button>
+        </div>
+      )}
+      <TodoTable
+        setTodoInput={setTodoInput}
+        setIsEdit={setIsEdit}
+        setSelectedTodoId={setSelectedTodoId}
+      />
     </div>
   );
 }
