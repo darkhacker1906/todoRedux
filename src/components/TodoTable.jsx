@@ -1,32 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
-import { deleteTodo } from "../redux/Action";
-import { useState } from "react";
+import { deleteTodo, handleCheck } from "../redux/Action";
+import Checkbox from "./Checkbox";
 
-function TodoTable({ setTodoInput,setIsEdit,setSelectedTodoId }) {
+function TodoTable({ setTodoInput, setIsEdit, setSelectedTodoId }) {
   const todoList = useSelector((state) => state.list);
-  const checklist=useSelector((state)=>state.list)
-  console.log(checklist);
   var dispatch = useDispatch();
-  // const [isChecked,setIsChecked]=useState(false);
-  
 
   const handleDelete = (todoId) => {
     dispatch(deleteTodo(todoId));
   };
 
-  const handleEdit = (todoId,todoData) => {
+  const handleEdit = (todoId, todoData) => {
     setTodoInput(todoData);
     setIsEdit(true);
     setSelectedTodoId(todoId);
   };
-   const handleCheckbox=(checkId)=>{
-    console.log(checkId);
-    setIsChecked(!isChecked);
-  }
 
+  const check_box_select = (todoId) => {
+     dispatch(handleCheck(todoId));
+  };
   return (
     <div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
@@ -42,10 +37,19 @@ function TodoTable({ setTodoInput,setIsEdit,setSelectedTodoId }) {
                   scope="row"
                   className=" flex justify-between px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white break-words "
                 >
-                  <p className="break-words flex gap-2"> <input type="checkbox" checked={todo.check} onChange={()=>handleCheckbox(todo.id)}/>{todo.data}</p>
+                  <p className="break-words flex gap-2">
+                    <Checkbox
+                      todoCheck={todo.checked}
+                      handleCheckBox={()=>check_box_select(todo.id)}
+                    />
+                    {todo.data}
+                  </p>
                   <div className="flex justify-between text-xl gap-2">
                     <MdDelete onClick={() => handleDelete(todo.id)} />
-                    <FaEdit onClick={() => handleEdit(todo.id,todo.data)} />
+                    <FaEdit onClick={() => handleEdit(todo.id, todo.data)} />
+                    {
+                      todo.checked &&<p className="flex align-middle text-sm"> Completed</p>
+                    }
                   </div>
                 </th>
               </tr>

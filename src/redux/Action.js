@@ -1,10 +1,10 @@
-export const addTodo = (data) => {
+export const addTodo = (data,checked) => {
   return {
     type: "ADD_TODO",
     payload: {
       data: data,
       id: new Date().getTime().toString(),
-      check:false
+      checked:false
     },
   };
 };
@@ -30,6 +30,14 @@ export const handleCheck = (todoId) => {
       type: "HANDLE_CHECK",
       payload: {
         todoId: todoId,
+      },
+    };
+  };
+  export const setfilterType=(filterType)=>{
+    return{
+      type:"SET_FILTER_TYPE",
+      payload:{
+        filterType:filterType
       },
     };
   };
